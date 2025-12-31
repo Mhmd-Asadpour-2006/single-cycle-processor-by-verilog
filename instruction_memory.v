@@ -1,12 +1,10 @@
 module instruction_memory(
     input [15:0] readAddress1,
-    input [15:0] readAddress2,
     input [15:0] writeAddress,
     input [47:0] writeData,
     input clk,
     input writeEnable,
     output [47:0] registerData1,
-    output [47:0] registerData2
 );
 
     wire [31:0] writeSelect;
@@ -58,12 +56,5 @@ module instruction_memory(
         readAddress1[4:0], registerData1
     );
 
-    mux32to1_48bit mux_r2 (
-        r0_out, r1_out, r2_out, r3_out, r4_out, r5_out, r6_out, r7_out,
-        r8_out, r9_out, r10_out, r11_out, r12_out, r13_out, r14_out, r15_out,
-        r16_out, r17_out, r18_out, r19_out, r20_out, r21_out, r22_out, r23_out,
-        r24_out, r25_out, r26_out, r27_out, r28_out, r29_out, r30_out, r31_out,
-        readAddress2[4:0], registerData2
-    );
 
 endmodule

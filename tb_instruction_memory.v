@@ -7,11 +7,9 @@ module tb_instruction_memory_48;
     reg [15:0] writeAddress;
     reg [47:0] writeData;
     reg [15:0] readAddress1;
-    reg [15:0] readAddress2;
 
     wire [47:0] registerData1;
-    wire [47:0] registerData2;
-
+	 
     // Instantiate DUT
     instruction_memory uut (
         .clk(clk),
@@ -19,9 +17,7 @@ module tb_instruction_memory_48;
         .writeAddress(writeAddress),
         .writeData(writeData),
         .readAddress1(readAddress1),
-        .readAddress2(readAddress2),
-        .registerData1(registerData1),
-        .registerData2(registerData2)
+        .registerData1(registerData1)
     );
 
     // Clock generation
@@ -34,7 +30,6 @@ module tb_instruction_memory_48;
         writeAddress = 16'd0;
         writeData = 48'd0;
         readAddress1 = 16'd0;
-        readAddress2 = 16'd0;
 
         $display("=== START TEST ===");
 
@@ -68,10 +63,8 @@ module tb_instruction_memory_48;
         writeEnable = 0;
 
         readAddress1 = 16'd12;
-        readAddress2 = 16'd5;
         #1;
-        if (registerData1 !== 48'hAAAA_BBBB_CCCC ||
-            registerData2 !== 48'h0001_2222_3333)
+        if (registerData1 !== 48'hAAAA_BBBB_CCCC)
             $display("❌ TEST 2 FAIL");
         else
             $display("✅ TEST 2 PASS");
@@ -96,10 +89,8 @@ module tb_instruction_memory_48;
         // Test 4: Two Reads Same Time
         // =============================
         readAddress1 = 16'd5;
-        readAddress2 = 16'd12;
         #1;
-        if (registerData1 !== 48'h0001_2222_3333 ||
-            registerData2 !== 48'hAAAA_BBBB_CCCC)
+        if (registerData1 !== 48'h0001_2222_3333 )
             $display("❌ TEST 4 FAIL");
         else
             $display("✅ TEST 4 PASS");
