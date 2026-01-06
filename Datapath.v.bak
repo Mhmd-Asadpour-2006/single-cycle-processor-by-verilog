@@ -1,0 +1,64 @@
+module DataPath(
+input clk,
+input Activate,
+output ifActive,
+output Lt,gt,eq
+);
+wire NegToSel;
+wire [15:0] Split3ToL;
+wire [15:0] PCOutIns;
+wire [15:0] PCInputIns;
+wire [47:0] InsMemToSpliter;
+wire [15:0] AToDataMem;
+wire [15:0] BToDataMem;
+wire [15:0] subToA;
+wire [15:0] AToSubtractor;
+wire [15:0] BToSubtractor;
+
+
+
+
+mux2to1_16bit MUX2_1 (
+        .clk(clk),
+        .A(PCOutIns),
+        .B(Split3ToL),
+        .S(NegToSel),
+        .Y(PCInputIns)
+    );
+subtractor subb (
+        .clk(clk),
+        .A(AToSubtractor),
+        .B(BToSubtractor),
+        .res(subToA),
+        .NEG(NegToSel)
+    );
+PC_Unit PCU (
+        .clk(clk),
+        .L1(PCInputIns),
+        .current_pc(PCOutIns)
+    ); 
+split48_to_3x16 spllit(
+        .clk(clk),
+        .in48(InsMemToSpliter),
+		  .out16_0(AToDataMem),
+		  .out16_1(BToDataMem),
+        .out16_2(Split3ToL)
+    );  
+instruction_memory insMem(
+        .clk(clk),
+        .readAddress1(PCOutIns),
+		  .writeAddress(),
+		  .writeData(),
+        .writeEnable(),
+		  .registerData1(InsMemToSpliter)
+    );  
+data_memory DataMem(
+        .clk(clk),
+        .readAddress1(AToDataMem),
+		  .readAddress2(BToDataMem),
+		  .writeAddress(AToDataMem),
+        .writeData(subToA),
+		  .writeEnable(),
+		  .registerData1(AToSubtractor),
+		  .registerData2(BToSubtractor)
+    );  	 
