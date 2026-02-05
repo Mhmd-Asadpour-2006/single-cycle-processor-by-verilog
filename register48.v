@@ -1,7 +1,7 @@
 module register48(Q, D, clk, w_en);
-  input [47:0] D;
-  input clk, w_en;
-  output [47:0] Q;
+  input signed [47:0] D;
+  input signed clk, w_en;
+  output signed [47:0] Q;
   
   wire [47:0] muxout;
   

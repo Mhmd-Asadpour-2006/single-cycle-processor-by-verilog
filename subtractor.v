@@ -1,9 +1,7 @@
-Verilog HDL
-// A - B
 module subtractor(A,B,res,NEG);
-  input [15:0] A, B;
-  output [15:0] res;
-  output NEG;
+  input signed [15:0] A, B;
+  output signed [15:0] res;
+  output signed NEG;
   
   wire [15:0] B_inverse;  
   
@@ -24,7 +22,7 @@ module subtractor(A,B,res,NEG);
   not(B_inverse[14],B[14]);
   not(B_inverse[15],B[15]);
   
-  wire c_out;
+  wire signed c_out;
   
   fulladder16 fulladder(A, B_inverse, 1'b1, c_out, res);
   
