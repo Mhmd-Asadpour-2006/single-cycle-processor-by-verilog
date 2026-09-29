@@ -1,0 +1,78 @@
+# Single-Cycle Processor in Verilog
+
+A single-cycle processor implemented in Verilog HDL, inspired by the MIPS architecture. This project was developed as part of a Computer Architecture course.
+
+## Overview
+
+This processor executes each instruction in a single clock cycle, meaning that fetch, decode, execute, memory access, and write-back all happen within one clock period. While simpler than pipelined designs, it provides a clear and educational foundation for understanding how a CPU works at the hardware level.
+
+The architecture follows classic MIPS design principles, including:
+
+- Program Counter (PC) for instruction addressing
+- Instruction Memory for fetching instructions
+- Register File with general-purpose registers
+- ALU for arithmetic and logic operations
+- Data Memory for load/store operations
+- Control Unit for generating control signals based on the opcode
+
+## Project Structure
+
+### Core Modules
+| File | Description |
+|------|-------------|
+| `Datapath.v` | Top-level datapath connecting all components |
+| `PC_Unit.v` | Program Counter unit |
+| `Subleq_ALU_Pure_Gates.v` | ALU implemented using pure logic gates |
+| `register16.v` / `register48.v` | Register modules with different bit widths |
+| `data_memory.v` | Data memory for load/store operations |
+| `instruction_memory.v` | Instruction memory for fetching instructions |
+
+### Building Blocks
+| File | Description |
+|------|-------------|
+| `Fulladder.v` / `Fulladder16.v` | Full adder circuits |
+| `subtractor.v` | Subtractor circuit |
+| `d_flipflop.v` | D flip-flop |
+| `Counter_1bit.v` | 1-bit counter |
+| `decoder5to32.v` | 5-to-32 decoder |
+| `split48_to_3x16.v` | Splits a 48-bit signal into three 16-bit parts |
+| `mux2to1.v` / `mux2to1_16bit.v` / `mux2to1_48bit.v` | 2-to-1 multiplexers |
+| `mux32to1_16bit.v` / `mux32to1_48bit.v` | 32-to-1 multiplexers |
+
+### Testbenches
+| File | Description |
+|------|-------------|
+| `tb_data_memory.v` | Testbench for data memory |
+| `tb_instruction_memory.v` | Testbench for instruction memory |
+| `test_pc_fixed.v` | Testbench for the PC unit |
+| `test_splitter.v` | Testbench for the splitter module |
+| `test_subtractor.v` | Testbench for the subtractor |
+
+## Features
+
+- Single-cycle datapath and control
+- MIPS-inspired instruction set
+- Modular Verilog design with separate modules for each component
+- Synthesizable RTL code
+- Testbenches provided for simulation and verification
+
+## Purpose
+
+This project was developed for a Computer Architecture course to demonstrate fundamental concepts of processor design, including:
+
+- Datapath and control design
+- Instruction execution flow
+- RTL design using Verilog
+- Simulation and verification of hardware designs
+
+## Tools Used
+
+- **Quartus** – for writing and developing the Verilog code
+- **ModelSim** – for simulating and verifying the design
+- **Verilog HDL** – for hardware description
+
+## How to Run
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/single-cycle-processor.git
