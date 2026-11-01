@@ -37,7 +37,7 @@ module DataPath(
     PC_Unit PCU (
         .clk(clk),
         .L1(PCInputIns),
-        .WE(not_load),          // وقتی load=1، PC ثابت می‌ماند
+        .WE(1'b1),              // PC is written every clock; during load its input is forced to 0 (acts as reset)
         .current_pc(PCOutIns)
     );
 
@@ -95,18 +95,21 @@ module DataPath(
         .registerData2(BToSubtractor)
     );
 
-    subtractor sub(
-        .A(BToSubtractor),
-        .B(AToSubtractor),
-        .res(subToB),
-        .NEG(branch)
+    // SUBLEQ ALU: out_B = B - A ; branch_sig = (result <= 0)
+    Subleq_ALU_Pure_Gates alu (
+        .A(AToSubtractor),
+        .B(BToSubtractor),
+        .out_B(subToB),
+        .branch_sig(branch)
     );
 
     // FIX: branch is used in the same cycle (the PC register already breaks the loop)
 
     // انتخاب PC بعدی
     always @(*) begin
-        if (branch == 1'b1)
+        if (load == 1'b1)
+            PCInputIns_reg = 16'd0;          // loading a program also resets PC to 0
+        else if (branch == 1'b1)
             PCInputIns_reg = Split3ToL;
         else
             PCInputIns_reg = pcAddOne;
