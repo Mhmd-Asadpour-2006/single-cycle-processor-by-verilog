@@ -10,7 +10,6 @@ module DataPath(
 
     wire not_load;
     wire branch;
-    reg  branch_r;
 
     wire [15:0] PCOutIns;
     wire [47:0] InsMemToSpliter;
@@ -85,15 +84,13 @@ module DataPath(
         .Y(AddressToDataMem)
     );
 
-    // *** FIX اصلی: writeEnable دیگر همیشه 1 نیست ***
-    // فقط هنگام load=1 می‌نویسیم تا حافظه در حالت اجرا خراب نشود
     data_memory DataMem (
         .clk(clk),
         .readAddress1(AToDataMem),
         .readAddress2(BToDataMem),
         .writeAddress(AddressToDataMem),
         .writeData(DataToDataMem),
-        .writeEnable(load),          // <<< اصلاح شد
+        .writeEnable(1'b1),  // FIX: SUBLEQ must write mem[B] every run cycle; in load mode the muxes already select WriteData/WriteAddress
         .registerData1(AToSubtractor),
         .registerData2(BToSubtractor)
     );
@@ -105,13 +102,11 @@ module DataPath(
         .NEG(branch)
     );
 
-    // branch یک سیکل رجیستر می‌شود
-    always @(posedge clk)
-        branch_r <= branch;
+    // FIX: branch is used in the same cycle (the PC register already breaks the loop)
 
     // انتخاب PC بعدی
     always @(*) begin
-        if (branch_r == 1'b1)
+        if (branch == 1'b1)
             PCInputIns_reg = Split3ToL;
         else
             PCInputIns_reg = pcAddOne;

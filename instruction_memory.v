@@ -4,7 +4,7 @@ module instruction_memory(
     input [47:0] writeData,
     input clk,
     input writeEnable,
-    output [47:0] registerData1,
+    output [47:0] registerData1
 );
 
     wire [31:0] writeSelect;
